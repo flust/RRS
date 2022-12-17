@@ -1,0 +1,18 @@
+embedding_size:128, learning_rate:0.0001
+Valid result:
+OrderedDict([('For geek', OrderedDict([('recall@5', 0.0314), ('precision@5', 0.0092), ('ndcg@5', 0.023), ('mrr@5', 0.0248), ('Rrecall', tensor(0.0427)), ('Rprecision', tensor([0.0088]))])), ('\nFor job', OrderedDict([('recall@5', 0.0233), ('precision@5', 0.0101), ('ndcg@5', 0.021), ('mrr@5', 0.0298), ('Rrecall', tensor(0.0427)), ('Rprecision', tensor([0.0088]))]))])
+Test result:
+(OrderedDict([('recall@5', 0.0328), ('precision@5', 0.0096), ('ndcg@5', 0.0244), ('mrr@5', 0.0264), ('Rrecall', tensor(0.0446)), ('Rprecision', tensor([0.0092]))]), OrderedDict([('recall@5', 0.0243), ('precision@5', 0.0106), ('ndcg@5', 0.0222), ('mrr@5', 0.032), ('Rrecall', tensor(0.0446)), ('Rprecision', tensor([0.0092]))]))
+
+embedding_size:128, learning_rate:5e-05
+Valid result:
+OrderedDict([('For geek', OrderedDict([('recall@5', 0.0319), ('precision@5', 0.0093), ('ndcg@5', 0.0233), ('mrr@5', 0.0251), ('Rrecall', tensor(0.0453)), ('Rprecision', tensor([0.0093]))])), ('\nFor job', OrderedDict([('recall@5', 0.0267), ('precision@5', 0.0113), ('ndcg@5', 0.0238), ('mrr@5', 0.0332), ('Rrecall', tensor(0.0453)), ('Rprecision', tensor([0.0093]))]))])
+Test result:
+(OrderedDict([('recall@5', 0.0338), ('precision@5', 0.0097), ('ndcg@5', 0.025), ('mrr@5', 0.0269), ('Rrecall', tensor(0.0471)), ('Rprecision', tensor([0.0097]))]), OrderedDict([('recall@5', 0.0273), ('precision@5', 0.0117), ('ndcg@5', 0.0248), ('mrr@5', 0.0351), ('Rrecall', tensor(0.0471)), ('Rprecision', tensor([0.0097]))]))
+
+embedding_size:128, learning_rate:0.001
+Valid result:
+OrderedDict([('For geek', OrderedDict([('recall@5', 0.0889), ('precision@5', 0.024), ('ndcg@5', 0.0691), ('mrr@5', 0.0724), ('Rrecall', tensor(0.0924)), ('Rprecision', tensor([0.0190]))])), ('\nFor job', OrderedDict([('recall@5', 0.0704), ('precision@5', 0.0278), ('ndcg@5', 0.069), ('mrr@5', 0.0947), ('Rrecall', tensor(0.0924)), ('Rprecision', tensor([0.0190]))]))])
+Test result:
+(OrderedDict([('recall@5', 0.091), ('precision@5', 0.0246), ('ndcg@5', 0.071), ('mrr@5', 0.0749), ('Rrecall', tensor(0.0935)), ('Rprecision', tensor([0.0192]))]), OrderedDict([('recall@5', 0.069), ('precision@5', 0.0276), ('ndcg@5', 0.0684), ('mrr@5', 0.0954), ('Rrecall', tensor(0.0935)), ('Rprecision', tensor([0.0192]))]))
+

@@ -5,6 +5,8 @@
 """
 recbole_pjf
 """
+import os
+os.system("pip install hyperopt==0.2.5 -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com")
 import argparse
 
 from recbole.trainer import HyperTuning
@@ -20,14 +22,23 @@ def main():
 
     # plz set algo='exhaustive' to use exhaustive search, in this case, max_evals is auto set
     config_file_list = args.config_files.strip().split(' ') if args.config_files else None
-    hp = HyperTuning(objective_function, algo='exhaustive',
+    hp = HyperTuning(objective_function, algo='exhaustive', early_stop=10, max_evals=100,
                      params_file=args.params_file, fixed_config_file_list=config_file_list)
     hp.run()
-    with open(args.output_file, 'w') as fp:
+    with open(args.output_file, "w") as fp:
         for params in hp.params2result:
-            fp.write(params + '\n')
-            fp.write('Valid result:\n' + str(hp.params2result[params]['best_valid_result']) + '\n')
-            fp.write('Test result:\n' + str(hp.params2result[params]['test_result']) + '\n\n')
+            fp.write(params + "\n")
+            fp.write(
+                "Valid result:\n"
+                + str(hp.params2result[params]["best_valid_result"])
+                + "\n"
+            )
+
+            fp.write(
+                "Test result:\n"
+                + str(hp.params2result[params]["test_result"])
+                + "\n\n"
+            )
 
     print('best params: ', hp.best_params)
     print('best result: ')

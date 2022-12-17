@@ -61,6 +61,7 @@ class PJFDataset(Dataset):
                 self.item_single_inter = self.inter_feat
 
         self.inter_feat_all = self.inter_feat
+        self.inter_feat_fail = self.inter_feat[self.inter_feat[self.label_field] == 0]
         if self.label_field in self.inter_feat.columns:
             self.inter_feat = self.inter_feat[self.inter_feat[self.label_field] == 1]
         # is load pre-trained text vec
@@ -107,6 +108,18 @@ class PJFDataset(Dataset):
         self.user_doc = self._doc_dataframe_to_interaction(self.user_doc)
         self.item_doc = self._doc_dataframe_to_interaction(self.item_doc)
 
+    def copy(self, new_inter_feat):
+        """Given a new interaction feature, return a new :class:`Dataset` object,
+        whose interaction feature is updated with ``new_inter_feat``, and all the other attributes the same.
+        Args:
+            new_inter_feat (Interaction): The new interaction feature need to be updated.
+        Returns:
+            :class:`~Dataset`: the new :class:`~Dataset` object, whose interaction feature has been updated.
+        """
+        nxt = copy.deepcopy(self)
+        nxt.inter_feat = copy.deepcopy(new_inter_feat)
+        return nxt
+
     def build(self):
         """Processing dataset according to evaluation setting, including Group, Order and Split.
         See :class:`~recbole.config.eval_setting.EvalSetting` for details.
@@ -130,8 +143,27 @@ class PJFDataset(Dataset):
             # test_j = self.copy(datasets[2].inter_feat[datasets[2].inter_feat[self.direct_field] != self.geek_direct])
             test_j = self.copy(datasets[2].inter_feat)
             test_j.change_direction()
+
+            if self.direct_field:
+                valid_g.inter_feat[self.direct_field] = torch.ones_like(valid_g.inter_feat[self.direct_field])
+                valid_j.inter_feat[self.direct_field] = 2 * torch.ones_like(valid_j.inter_feat[self.direct_field])
+                test_g.inter_feat[self.direct_field] = torch.ones_like(test_g.inter_feat[self.direct_field])
+                test_j.inter_feat[self.direct_field] = 2 * torch.ones_like(test_j.inter_feat[self.direct_field])
+            
+            valid_g.inter_feat = self.drop_duplicates_for_test(valid_g)
+            valid_j.inter_feat = self.drop_duplicates_for_test(valid_j)
+            test_g.inter_feat = self.drop_duplicates_for_test(test_g)
+            test_j.inter_feat = self.drop_duplicates_for_test(test_j)
+
             return [datasets[0], valid_g, valid_j, test_g, test_j]
         return datasets
+
+    def drop_duplicates_for_test(self, dataset):
+        new_inter = pd.DataFrame(dataset.inter_feat.numpy()).drop_duplicates(subset=[self.uid_field, self.iid_field])
+        for key in new_inter:
+            if isinstance(new_inter[key][0], np.float32):
+                new_inter[key] = new_inter[key].astype(float)
+        return Interaction(new_inter)
 
     def _get_field_from_config(self):
         """Initialization common field names.
@@ -324,13 +356,13 @@ class PJFDataset(Dataset):
     def user_single_inter_matrix(self, form='coo', value_field=None):
         if not self.uid_field or not self.iid_field:
             raise ValueError('dataset does not exist uid/iid, thus can not converted to sparse matrix.')
-        self.user_single_inter = self.inter_feat[self.inter_feat[self.direct_field] == self.geek_direct]
+        self.user_single_inter = self.inter_feat_fail[self.inter_feat_fail[self.direct_field] == self.geek_direct]
         return self._create_sparse_matrix(self.user_single_inter, self.uid_field, self.iid_field, form, value_field)
 
     def item_single_inter_matrix(self, form='coo', value_field=None):
         if not self.uid_field or not self.iid_field:
             raise ValueError('dataset does not exist uid/iid, thus can not converted to sparse matrix.')
-        self.item_single_inter = self.inter_feat[self.inter_feat[self.direct_field] != self.geek_direct]
+        self.item_single_inter = self.inter_feat_fail[self.inter_feat_fail[self.direct_field] != self.geek_direct]
         return self._create_sparse_matrix(self.item_single_inter, self.uid_field, self.iid_field, form, value_field)
 
       
@@ -470,6 +502,7 @@ class PJFFFDataset(PJFDataset):
         """Change direction for Validation and testing.
         """
         self.uid_field, self.iid_field = self.iid_field, self.uid_field
+        self.user_num, self.item_num = self.item_num, self.user_num
         self.user_feat, self.item_feat = self.item_feat, self.user_feat
         self.his_item, self.his_user = self.his_user, self.his_item
 

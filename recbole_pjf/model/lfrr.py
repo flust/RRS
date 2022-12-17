@@ -60,11 +60,13 @@ class LFRR(GeneralRecommender):
         neg_item = interaction[self.NEG_ITEM_ID]
         neg_user = interaction[self.NEG_USER_ID]
 
-        score_pos = self.forward(pos_user, pos_item)
-        score_neg_1 = self.forward(pos_user, neg_item)
-        score_neg_2 = self.forward(neg_user, pos_item)
+        score_pos_1 = self.forward_ui(pos_user, pos_item)
+        score_pos_2 = self.forward_iu(pos_user, pos_item)
 
-        loss = self.loss(score_pos, score_neg_1) + self.loss(score_pos, score_neg_2)
+        score_neg_1 = self.forward_ui(pos_user, neg_item)
+        score_neg_2 = self.forward_iu(neg_user, pos_item)
+
+        loss = self.loss(score_pos_1, score_neg_1) + self.loss(score_pos_2, score_neg_2)
         return loss
 
     def predict(self, interaction):

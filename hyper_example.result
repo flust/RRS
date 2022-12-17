@@ -1,0 +1,6 @@
+embedding_size:64, learning_rate:0.001
+Valid result:
+OrderedDict([('For geek', OrderedDict([('recall@5', 0.0952), ('precision@5', 0.0196), ('ndcg@5', 0.0911), ('mrr@5', 0.0897), ('Rrecall', tensor(0.1114)), ('Rprecision', tensor([0.0123]))])), ('\nFor job', OrderedDict([('recall@5', 0.1162), ('precision@5', 0.0265), ('ndcg@5', 0.1105), ('mrr@5', 0.1141), ('Rrecall', tensor(0.1114)), ('Rprecision', tensor([0.0123]))]))])
+Test result:
+(OrderedDict([('recall@5', 0.1037), ('precision@5', 0.0215), ('ndcg@5', 0.0987), ('mrr@5', 0.0971), ('Rrecall', tensor(0.1107)), ('Rprecision', tensor([0.0125]))]), OrderedDict([('recall@5', 0.1154), ('precision@5', 0.0276), ('ndcg@5', 0.1174), ('mrr@5', 0.1313), ('Rrecall', tensor(0.1107)), ('Rprecision', tensor([0.0125]))]))
+

@@ -2,13 +2,14 @@
 log_tensorboard/
 saved/
 #recbole_pjf/properties/dataset/
-#dataset
+dataset
 hyper_param/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+arsenal_result/
 *$py.class
-
+*.pth
 # C extensions
 *.so
 *.pyc
